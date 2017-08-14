@@ -4,6 +4,7 @@ import requests
 import hmac
 import requests
 import urllib.parse
+#from urlparse import urlparse
 import random
 from piston.steem import Steem
 from Crypto.Cipher import XOR
@@ -241,7 +242,7 @@ if __name__ == '__main__':
         sbdbal = balance("SBD")
         bt.withdraw("SBD", batch+0.01, account)
         stbal = steem.get_balances(account)
-        ststeembal = float(stbal["balance"].split()[0])
+        ststeembal = float(str(stbal["balance"]).split()[0])
         if ststeembal >= 10:
             steem.transfer("bittrex", ststeembal, "STEEM", memo=bittrexmemo, account=account)
             msg = "Transfered %s STEEM to Bittrex" % steembal
@@ -249,7 +250,7 @@ if __name__ == '__main__':
 
     def convert():
         stbal = steem.get_balances(account)
-        stsbdbal = float(stbal["sbd_balance"].split()[0])
+        stsbdbal = float(str(stbal["sbd_balance"]).split()[0])
         if stsbdbal >= batch:
             steem.convert(batch, account=account)
             msg = "Converted %s SBD" % str(batch)
@@ -280,7 +281,8 @@ if __name__ == '__main__':
     intvshort = int(market["Interval_Short"])
 
     bt = Bittrex(api_key, api_secret)
-    steem = Steem(wif=wif, node="ws://127.0.0.1:8090")    #steem = Steem(wif=wif)
+    #steem = Steem(wif=wif, node="ws://127.0.0.1:8090")    #steem = Steem(wif=wif)
+    steem = Steem(wif=wif, node="wss://steemd.steemit.com")
     cancel_all("both")
     cancel_steem()
     convert()
